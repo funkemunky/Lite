@@ -12,7 +12,8 @@ public class Disabler extends Module {
                 new KeyChange("KeyChange", this),
                 new KeepAliveCancel("KeepAliveCancel", this),
                 new TransactionCancel("TransactionCancel", this),
-                new TransactionKeepAliveCancel("C0F&C00-Cancel", this)
+                new TransactionKeepAliveCancel("C0F&C00-Cancel", this),
+                new CubeCraft("CubeCraft", this)
         );
     }
 }

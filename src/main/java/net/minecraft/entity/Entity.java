@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
+import com.github.creeper123123321.viafabric.ViaFabric;
 import me.rhys.base.Lite;
 import me.rhys.base.event.Event;
 import me.rhys.base.event.impl.player.*;
@@ -2056,7 +2057,7 @@ public abstract class Entity implements ICommandSender
 
     public float getCollisionBorderSize()
     {
-        return 0.1F;
+        return ViaFabric.clientSideVersion >= 107 ? 0F : 0.1F;
     }
 
     /**

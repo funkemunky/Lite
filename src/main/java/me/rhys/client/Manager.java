@@ -27,6 +27,7 @@ import me.rhys.client.module.player.disabler.Disabler;
 import me.rhys.client.module.player.nofall.NoFall;
 import me.rhys.client.module.render.*;
 import me.rhys.client.module.render.animations.Animations;
+import me.rhys.client.module.render.esp.Esp;
 import me.rhys.client.ui.alt.AltUI;
 import me.rhys.client.ui.click.ClickUI;
 import org.lwjgl.input.Keyboard;
@@ -86,7 +87,10 @@ public class Manager {
                 new ClickGui("ClickGui", "Opens the ClickUI", Category.RENDER, Keyboard.KEY_RSHIFT),
                 new Animations("Animations", "Change swing / block animations",
                         Category.RENDER, Keyboard.KEY_NONE),
-                new Chams("Chams", "Chams?", Category.RENDER, Keyboard.KEY_NONE),
+                new Chams("Chams", "View players through blocks by their render view.",
+                        Category.RENDER, Keyboard.KEY_NONE),
+                new Esp("Esp", "Classic viewing of players through blocks",
+                        Category.RENDER, Keyboard.KEY_NONE),
                 new Nametags("Nametags", "Display a player's nametag",
                         Category.RENDER, Keyboard.KEY_NONE),
                 new NoHurtCam("NoHurtCam", "Hides hurtcam", Category.RENDER, Keyboard.KEY_NONE),

@@ -8,9 +8,12 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -35,7 +38,147 @@ public class RenderUtil {
         return true;
     }
 
+    public static void drawFilledBox(AxisAlignedBB boundingBox) {
+        GlStateManager.pushMatrix();
+        GlStateManager.disableDepth();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.disableCull();
+        GL11.glBegin(7);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ);
+        GL11.glEnd();
+        GL11.glBegin(7);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.minY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ);
+        GL11.glEnd();
+        GL11.glBegin(7);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.minY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glEnd();
+        GL11.glBegin(7);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glEnd();
+        GL11.glBegin(7);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.minY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.minY, boundingBox.minZ);
+        GL11.glEnd();
+        GL11.glBegin(7);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.minY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glEnd();
+        GL11.glBegin(7);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.minY, boundingBox.minZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ);
+        GL11.glVertex3d(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ);
+        GL11.glEnd();
+        GlStateManager.enableDepth();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableLighting();
+        GlStateManager.enableCull();
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
+    }
 
+    public static void drawBoundingBox(AxisAlignedBB p_181563_0_, int color) {
+        float alpha = (color >> 24 & 255) / 255.0f;
+        float red = (color >> 16 & 255) / 255.0f;
+        float green = (color >> 8 & 255) / 255.0f;
+        float blue = (color & 255) / 255.0f;
+        GlStateManager.pushMatrix();
+        GlStateManager.disableDepth();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.disableCull();
+        GL11.glLineWidth(0.05f);
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(3, DefaultVertexFormats.POSITION_COLOR);
+        worldrenderer.pos(p_181563_0_.minX, p_181563_0_.minY, p_181563_0_.minZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.maxX, p_181563_0_.minY, p_181563_0_.minZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.maxX, p_181563_0_.minY, p_181563_0_.maxZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.minX, p_181563_0_.minY, p_181563_0_.maxZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.minX, p_181563_0_.minY, p_181563_0_.minZ).color(red, green, blue, alpha).endVertex();
+        tessellator.draw();
+        worldrenderer.begin(3, DefaultVertexFormats.POSITION_COLOR);
+        worldrenderer.pos(p_181563_0_.minX, p_181563_0_.maxY, p_181563_0_.minZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.maxX, p_181563_0_.maxY, p_181563_0_.minZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.maxX, p_181563_0_.maxY, p_181563_0_.maxZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.minX, p_181563_0_.maxY, p_181563_0_.maxZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.minX, p_181563_0_.maxY, p_181563_0_.minZ).color(red, green, blue, alpha).endVertex();
+        tessellator.draw();
+        worldrenderer.begin(1, DefaultVertexFormats.POSITION_COLOR);
+        worldrenderer.pos(p_181563_0_.minX, p_181563_0_.minY, p_181563_0_.minZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.minX, p_181563_0_.maxY, p_181563_0_.minZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.maxX, p_181563_0_.minY, p_181563_0_.minZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.maxX, p_181563_0_.maxY, p_181563_0_.minZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.maxX, p_181563_0_.minY, p_181563_0_.maxZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.maxX, p_181563_0_.maxY, p_181563_0_.maxZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.minX, p_181563_0_.minY, p_181563_0_.maxZ).color(red, green, blue, alpha).endVertex();
+        worldrenderer.pos(p_181563_0_.minX, p_181563_0_.maxY, p_181563_0_.maxZ).color(red, green, blue, alpha).endVertex();
+        tessellator.draw();
+        GlStateManager.enableDepth();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableLighting();
+        GlStateManager.enableCull();
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
+    }
+
+    public static void setColor(float r, float g, float b, float a) {
+        GL11.glColor4f(r, g, b, a);
+    }
+
+    private static final Frustum FRUSTRUM = new Frustum();
+    public static boolean isInFrustumView(Entity ent) {
+        Entity current = Minecraft.getMinecraft().getRenderViewEntity();
+        double x = interpolate(current.posX, current.lastTickPosX), y = interpolate(current.posY, current.lastTickPosY),
+                z = interpolate(current.posZ, current.lastTickPosZ);
+        FRUSTRUM.setPosition(x, y, z);
+        return FRUSTRUM.isBoundingBoxInFrustum(ent.getEntityBoundingBox()) || ent.ignoreFrustumCheck;
+    }
+
+    public static double interpolate(double newPos, double oldPos) {
+        return oldPos + (newPos - oldPos) * Minecraft.getMinecraft().timer.renderPartialTicks;
+    }
 
     public static boolean renderAltSkin(EntityPlayer player, Vec2f pos, int size) {
         if (((AbstractClientPlayer) player).getLocationSkin() == null)

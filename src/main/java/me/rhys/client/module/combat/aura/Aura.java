@@ -53,6 +53,9 @@ public class Aura extends Module {
     @Clamp(min = 1, max = 20)
     public double cps = 15;
 
+    @Name("randomCps")
+    public boolean randomizeCps = true;
+
     @Name("Reach")
     @Clamp(min = 1, max = 9)
     public double reach = 4.25f;
@@ -161,7 +164,8 @@ public class Aura extends Module {
 
         //Checking reach distance
         if(rayCheck) {
-            final AxisAlignedBB targetBox = entity.getEntityBoundingBox();
+            final AxisAlignedBB targetBox = entity.getEntityBoundingBox().expand(entity.getCollisionBorderSize(),
+                    entity.getCollisionBorderSize(), entity.getCollisionBorderSize());
             final Vec2f rotation = RotationUtil.getRotations(entity);
 
             final Vec3 origin = mc.thePlayer.getPositionEyes(1.0f);
@@ -234,7 +238,8 @@ public class Aura extends Module {
     }
 
     public void swing(Entity target) {
-        double aps = (cps + MathUtil.randFloat(MathUtil.randFloat(1, 3), MathUtil.randFloat(3, 5)));
+        double aps = (cps
+                + (randomizeCps ? MathUtil.randFloat(MathUtil.randFloat(1, 3), MathUtil.randFloat(3, 5)) : 0));
 
         if (this.attackTimer.hasReached(1000L / aps)) {
             this.attackTimer.reset();

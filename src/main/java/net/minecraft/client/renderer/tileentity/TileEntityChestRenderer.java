@@ -1,6 +1,10 @@
 package net.minecraft.client.renderer.tileentity;
 
 import java.util.Calendar;
+
+import me.rhys.base.Lite;
+import me.rhys.base.event.Event;
+import me.rhys.base.event.impl.render.RenderChestEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.client.model.ModelChest;
@@ -194,6 +198,11 @@ public class TileEntityChestRenderer extends TileEntitySpecialRenderer<TileEntit
                 GlStateManager.popMatrix();
                 GlStateManager.matrixMode(5888);
             }
+        }
+
+        if (destroyStage == -1) {
+            RenderChestEvent renderChestEvent = new RenderChestEvent(te, x, y, z, partialTicks, destroyStage);
+            Lite.EVENT_BUS.<Event>call(renderChestEvent);
         }
     }
 }
